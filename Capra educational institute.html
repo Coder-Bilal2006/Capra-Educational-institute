@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capra Educational Institute - Professional Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: #2c3e50;
+            color: white;
+            padding: 20px 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+
+        nav {
+            display: flex;
+            background: #34495e;
+            padding: 0;
+            overflow-x: auto;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            color: white;
+            padding: 15px 25px;
+            cursor: pointer;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .nav-btn:hover {
+            background: #2c3e50;
+        }
+
+        .nav-btn.active {
+            background: #3498db;
+        }
+
+        .content {
+            padding: 30px;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+
+        .content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-success {
+            background: #27ae60;
+        }
+
+        .btn-warning {
+            background: #f39c12;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            overflow-x: auto;
+            display: block;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: #34495e;
+            color: white;
+            position: sticky;
+            top: 0;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        .status-paid {
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .status-unpaid {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .student-paid-row {
+            background-color: #e8f5e9 !important;
+        }
+        
+        .salary-paid-row {
+            background-color: #e8f5e9 !important;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card h3 {
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .number {
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .alert {
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            animation: slideIn 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .lecture-checkbox {
+            display: inline-block;
+            margin: 10px;
+            padding: 15px;
+            background: white;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 120px;
+            text-align: center;
+        }
+
+        .lecture-checkbox:hover {
+            border-color: #3498db;
+            transform: scale(1.05);
+        }
+
+        .lecture-checkbox.selected {
+            background: #27ae60;
+            border-color: #27ae60;
+            color: white;
+        }
+
+        .lecture-checkbox input {
+            width: auto;
+            margin-right: 8px;
+            transform: scale(1.2);
+        }
+
+        .lecture-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .paid-badge {
+            background: #27ae60;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            display: inline-block;
+        }
+
+        .pay-btn {
+            background: #27ae60;
+            padding: 5px 10px;
+            font-size: 12px;
+        }
+
+        .extra-charge-item {
+            background: #fff3cd;
+            padding: 8px 12px;
+            margin: 5px 0;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Print styles for fee slip */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .print-slip-container, .print-slip-container * {
+                visibility: visible;
+            }
+            .print-slip-container {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                padding: 20px;
+                background: white;
+            }
+            .no-print {
+                display: none;
+            }
+            button, .nav-btn, nav, .stats, .form-card, .search-box, .alert {
+                display: none !important;
+            }
+        }
+
+        .print-slip-container {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+        .slip-header {
+            text-align: center;
+            border-bottom: 2px solid #2c3e50;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
+        .slip-header h2 {
+            color: #2c3e50;
+        }
+        .slip-header p {
+            color: #7f8c8d;
+        }
+        .slip-section {
+            margin-bottom: 20px;
+        }
+        .slip-section h3 {
+            background: #34495e;
+            color: white;
+            padding: 8px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .info-row {
+            display: flex;
+            margin-bottom: 8px;
+            border-bottom: 1px dotted #eee;
+            padding: 4px 0;
+        }
+        .info-label {
+            width: 150px;
+            font-weight: bold;
+        }
+        .info-value {
+            flex: 1;
+        }
+        .fee-table, .payment-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .fee-table th, .fee-table td, .payment-table th, .payment-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .fee-table th, .payment-table th {
+            background: #ecf0f1;
+        }
+        .total-row {
+            font-weight: bold;
+            background: #f9f9f9;
+        }
+        .status-paid {
+            color: #27ae60;
+        }
+        .status-unpaid {
+            color: #e74c3c;
+        }
+        .slip-footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 12px;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏫 Capra Educational Institute</h1>
+            <p>Lecture-wise Attendance | 1 Free Leave Per Month | Sunday Holiday</p>
+        </header>
+        
+        <nav>
+            <button class="nav-btn active" onclick="showTab('dashboard')">📊 Dashboard</button>
+            <button class="nav-btn" onclick="showTab('teachers')">👨‍🏫 Teachers</button>
+            <button class="nav-btn" onclick="showTab('students')">👨‍🎓 Students</button>
+            <button class="nav-btn" onclick="showTab('attendance')">📅 Mark Attendance</button>
+            <button class="nav-btn" onclick="showTab('salary')">💰 Salary</button>
+            <button class="nav-btn" onclick="showTab('fees')">💵 Fee Management</button>
+            <button class="nav-btn" onclick="showTab('reports')">📊 Reports</button>
+            <button class="nav-btn" onclick="showTab('settings')">⚙️ Settings</button>
+        </nav>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="content active">
+            <div class="stats">
+                <div class="stat-card" onclick="showTab('teachers')">
+                    <h3>Total Teachers</h3>
+                    <div class="number" id="dashTeachers">0</div>
+                </div>
+                <div class="stat-card" onclick="showTab('students')">
+                    <h3>Total Students</h3>
+                    <div class="number" id="dashStudents">0</div>
+                </div>
+                <div class="stat-card" onclick="showTab('fees')">
+                    <h3>Fee Collected</h3>
+                    <div class="number" id="dashFees">₹0</div>
+                </div>
+                <div class="stat-card" onclick="showTab('salary')">
+                    <h3>Salary Payout</h3>
+                    <div class="number" id="dashSalary">₹0</div>
+                </div>
+            </div>
+            <div class="form-card">
+                <h3>📋 System Information</h3>
+                <p>✅ Sundays are holidays - No attendance marking required</p>
+                <p>✅ <strong>1st Leave of the month is FREE (No Fine)</strong></p>
+                <p>✅ From 2nd leave onwards: ₹200 fine per leave day</p>
+                <p>✅ Teacher salary: ₹5000 per daily lecture per month (full attendance = daily capacity × 5000)</p>
+                <p>✅ Leaves do NOT deduct salary proportionally – only the fine applies after free leaves</p>
+                <p>✅ Extra charges (test, farewell, activities) can be added in Fee Management tab</p>
+                <p>✅ <span style="color:#27ae60;">Green rows:</span> Student fee fully paid | Teacher salary paid for current month</p>
+                <p>✅ Click 🖨️ Print Slip next to any student to get a detailed fee slip</p>
+            </div>
+        </div>
+
+        <!-- Teachers Tab -->
+        <div id="teachers" class="content">
+            <div class="form-card">
+                <h3>📝 Add New Teacher</h3>
+                <form id="teacherForm">
+                    <div class="form-group">
+                        <label>Full Name *</label>
+                        <input type="text" id="teacherName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Subject *</label>
+                        <input type="text" id="teacherSubject" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone *</label>
+                        <input type="text" id="teacherPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Daily Lectures Capacity (1-5)</label>
+                        <input type="number" id="teacherMaxLectures" min="1" max="5" value="1" required>
+                        <small>Full month salary = Daily Lectures × ₹5000 | First leave free, then ₹200 fine per leave day</small>
+                    </div>
+                    <button type="submit">➕ Add Teacher</button>
+                </form>
+            </div>
+
+            <div class="search-box">
+                <input type="text" id="teacherSearch" placeholder="🔍 Search teacher..." onkeyup="searchTeachers()">
+                <button onclick="exportToCSV('teachers')" class="export-btn">📥 Export</button>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table id="teachersTable">
+                    <thead><tr><th>ID</th><th>Name</th><th>Subject</th><th>Phone</th><th>Daily Lectures</th><th>Month Lectures</th><th>Leave Days</th><th>Fine Amount</th><th>Salary</th><th>Salary Status</th><th>Actions</th></thead>
+                    <tbody id="teachersList"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Students Tab -->
+        <div id="students" class="content">
+            <div class="form-card">
+                <h3>📝 Add New Student</h3>
+                <form id="studentForm">
+                    <div class="form-group">
+                        <label>Full Name *</label>
+                        <input type="text" id="studentName" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Class *</label>
+                        <select id="studentClass" required>
+                            <option value="9">Class 9</option>
+                            <option value="10">Class 10</option>
+                            <option value="11">Class 11</option>
+                            <option value="12">Class 12</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Section</label>
+                        <input type="text" id="studentSection" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>Parent Name *</label>
+                        <input type="text" id="studentParent" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone *</label>
+                        <input type="text" id="studentPhone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Monthly Fee (₹)</label>
+                        <input type="number" id="studentFee" required>
+                    </div>
+                    <button type="submit">➕ Add Student</button>
+                </form>
+            </div>
+
+            <div class="search-box">
+                <input type="text" id="studentSearch" placeholder="🔍 Search student..." onkeyup="searchStudents()">
+                <button onclick="exportToCSV('students')" class="export-btn">📥 Export</button>
+            </div>
+
+            <div style="overflow-x: auto;">
+                <table id="studentsTable">
+                    <thead><tr><th>Roll No</th><th>Name</th><th>Class</th><th>Section</th><th>Parent</th><th>Phone</th><th>Monthly Fee</th><th>Extra Charges</th><th>Total Due</th><th>Status</th><th>Actions</th></thead>
+                    <tbody id="studentsList"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Attendance Tab -->
+        <div id="attendance" class="content">
+            <div class="form-card">
+                <h3>📅 Mark Lecture-wise Attendance</h3>
+                <div class="alert alert-info" style="display:block; margin-bottom:15px;">
+                    ℹ️ <strong>Leave Policy:</strong> 1st leave of the month is FREE! From 2nd leave onwards: ₹200 fine per leave day.
+                    <br>✅ <strong>Present Day = All lectures taken.</strong> If ANY lecture is missed, it's a LEAVE DAY.
+                </div>
+                <div class="form-group">
+                    <label>Select Date</label>
+                    <input type="date" id="attendanceDate" onchange="checkIfSunday()">
+                    <span id="sundayWarning" style="color:#e74c3c; display:none;">🎉 Sunday is a holiday!</span>
+                </div>
+                <div class="form-group">
+                    <label>Select Teacher</label>
+                    <select id="attendanceTeacher" onchange="loadLectureCheckboxes()"></select>
+                </div>
+                <div id="lectureCheckboxes" style="margin-top: 20px;"></div>
+                <div id="attendanceSummary" style="margin-top: 15px; padding: 10px; background: #e8f4f8; border-radius: 5px; display: none;"></div>
+                <button onclick="saveCheckboxAttendance()" class="btn-success" style="margin-top: 15px;">✅ Save Attendance</button>
+            </div>
+
+            <h3>📊 Attendance History</h3>
+            <div style="overflow-x: auto;">
+                <table id="attendanceTable">
+                    <thead><tr><th>Date</th><th>Day</th><th>Teacher</th><th>Lectures Taken</th><th>Total Lectures</th><th>Status</th><th>Leave Fine</th><th>Note</th></tr></thead>
+                    <tbody id="attendanceList"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Salary Tab -->
+        <div id="salary" class="content">
+            <div class="stats">
+                <div class="stat-card">
+                    <h3>Total Salary Payout</h3>
+                    <div class="number" id="totalSalaryMonth">₹0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Working Days (Mon-Sat)</h3>
+                    <div class="number" id="workingDaysCount">0</div>
+                </div>
+            </div>
+            <button onclick="exportToCSV('salary')" class="export-btn">📥 Export Salary</button>
+            <div style="overflow-x: auto;">
+                <table id="salaryTable">
+                    <thead><tr><th>ID</th><th>Name</th><th>Subject</th><th>Total Lectures</th><th>Present Days</th><th>Leave Days</th><th>Free Leave</th><th>Paid Leaves</th><th>Fine</th><th>Final Salary</th><th>Payment Status</th><th>Action</th></tr></thead>
+                    <tbody id="salaryList"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Fee Management Tab -->
+        <div id="fees" class="content">
+            <div class="stats">
+                <div class="stat-card">
+                    <h3>Total Collected</h3>
+                    <div class="number" id="totalCollected">₹0</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Pending</h3>
+                    <div class="number" id="totalPending">₹0</div>
+                </div>
+            </div>
+            <div class="form-card">
+                <h3>💰 Collect Fee</h3>
+                <div class="form-group">
+                    <label>Roll Number</label>
+                    <input type="number" id="feeRollNo" placeholder="Enter Roll Number">
+                    <button onclick="loadStudentForFee()" style="margin-top:10px">Load Student</button>
+                </div>
+                <div id="feeStudentInfo"></div>
+            </div>
+
+            <div class="form-card">
+                <h3>➕ Add Extra Charge (Test, Farewell, Activity, etc.)</h3>
+                <div class="form-group">
+                    <label>Roll Number</label>
+                    <input type="number" id="extraChargeRollNo" placeholder="Student Roll Number">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" id="extraChargeDesc" placeholder="e.g., Test Series, Farewell Party, Sports Event">
+                </div>
+                <div class="form-group">
+                    <label>Amount (₹)</label>
+                    <input type="number" id="extraChargeAmount" placeholder="Amount">
+                </div>
+                <button onclick="addExtraCharge()" class="btn-warning">➕ Add Extra Charge</button>
+            </div>
+
+            <h3>📋 Payment History</h3>
+            <div style="overflow-x: auto;">
+                <table id="feeHistoryTable">
+                    <thead><tr><th>Date</th><th>Roll No</th><th>Student</th><th>Amount</th><th>Method</th></tr></thead>
+                    <tbody id="feeHistoryList"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Reports Tab -->
+        <div id="reports" class="content">
+            <div class="form-card">
+                <h3>🔍 Search Student by Roll Number</h3>
+                <input type="number" id="searchRollNo" placeholder="Enter Roll Number">
+                <button onclick="searchStudentByRoll()" style="margin-top:10px">Search</button>
+                <div id="studentDetails" style="margin-top:15px;"></div>
+            </div>
+            <div class="form-card">
+                <h3>🔍 Search Teacher by ID</h3>
+                <input type="number" id="searchTeacherId" placeholder="Enter Teacher ID">
+                <button onclick="searchTeacherById()" style="margin-top:10px">Search</button>
+                <div id="teacherDetails" style="margin-top:15px;"></div>
+            </div>
+        </div>
+
+        <!-- Settings Tab -->
+        <div id="settings" class="content">
+            <div class="form-card">
+                <h3>⚙️ Settings</h3>
+                <div class="form-group">
+                    <label>Salary per Daily Lecture per Month (₹)</label>
+                    <input type="number" id="salaryPerLecture" value="5000">
+                </div>
+                <div class="form-group">
+                    <label>Leave Fine per Day (₹)</label>
+                    <input type="number" id="leaveFine" value="200">
+                </div>
+                <div class="form-group">
+                    <label>Free Leaves Allowed (per month)</label>
+                    <input type="number" id="freeLeaves" value="1" min="0" max="5">
+                </div>
+                <button onclick="saveSettings()">Save Settings</button>
+                <button onclick="backupData()" class="btn-success">💾 Backup</button>
+                <button onclick="restoreData()" class="btn-warning">📂 Restore</button>
+                <button onclick="clearAllData()" class="btn-danger">⚠️ Clear All Data</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== DATA STORAGE ====================
+        let teachers = [];
+        let students = [];
+        let attendance = [];
+        let feeHistory = [];
+        let salaryPayments = [];
+        let extraCharges = [];
+        let nextRollNum = 801;
+        let teacherIdCounter = 1;
+        let nextExtraChargeId = 1;
+        
+        let settings = {
+            salaryPerLecture: 5000,
+            leaveFine: 200,
+            freeLeaves: 1
+        };
+
+        function loadAllData() {
+            teachers = JSON.parse(localStorage.getItem('capra_teachers')) || [];
+            students = JSON.parse(localStorage.getItem('capra_students')) || [];
+            attendance = JSON.parse(localStorage.getItem('capra_attendance')) || [];
+            feeHistory = JSON.parse(localStorage.getItem('capra_fees')) || [];
+            salaryPayments = JSON.parse(localStorage.getItem('capra_salary_payments')) || [];
+            extraCharges = JSON.parse(localStorage.getItem('capra_extra_charges')) || [];
+            nextRollNum = parseInt(localStorage.getItem('capra_next_roll')) || 801;
+            teacherIdCounter = parseInt(localStorage.getItem('capra_next_tid')) || 1;
+            nextExtraChargeId = parseInt(localStorage.getItem('capra_next_extra_id')) || 1;
+            
+            let savedSettings = localStorage.getItem('capra_settings');
+            if(savedSettings) {
+                let s = JSON.parse(savedSettings);
+                settings.salaryPerLecture = s.salaryPerLecture || 5000;
+                settings.leaveFine = s.leaveFine || 200;
+                settings.freeLeaves = s.freeLeaves || 1;
+            }
+        }
+
+        function saveAllData() {
+            localStorage.setItem('capra_teachers', JSON.stringify(teachers));
+            localStorage.setItem('capra_students', JSON.stringify(students));
+            localStorage.setItem('capra_attendance', JSON.stringify(attendance));
+            localStorage.setItem('capra_fees', JSON.stringify(feeHistory));
+            localStorage.setItem('capra_salary_payments', JSON.stringify(salaryPayments));
+            localStorage.setItem('capra_extra_charges', JSON.stringify(extraCharges));
+            localStorage.setItem('capra_next_roll', nextRollNum);
+            localStorage.setItem('capra_next_tid', teacherIdCounter);
+            localStorage.setItem('capra_next_extra_id', nextExtraChargeId);
+            localStorage.setItem('capra_settings', JSON.stringify(settings));
+        }
+
+        function getCurrentYearMonth() {
+            let now = new Date();
+            return `${now.getFullYear()}-${now.getMonth()+1}`;
+        }
+
+        function isSalaryPaid(teacherId) {
+            let ym = getCurrentYearMonth();
+            return salaryPayments.some(p => p.teacherId === teacherId && p.yearMonth === ym);
+        }
+
+        function markSalaryPaid(teacherId) {
+            if(!isSalaryPaid(teacherId)) {
+                salaryPayments.push({ teacherId, yearMonth: getCurrentYearMonth() });
+                saveAllData();
+                updateAll();
+                showAlert(`✅ Salary for teacher ID ${teacherId} marked as PAID!`, "success");
+            } else {
+                showAlert("Salary already paid for this month!", "info");
+            }
+        }
+
+        function isSunday(dateString) {
+            return new Date(dateString).getDay() === 0;
+        }
+
+        function getDayName(dateString) {
+            return new Date(dateString).toLocaleDateString('en-US', { weekday: 'long' });
+        }
+
+        function getSectionForClass(className) {
+            let count = students.filter(s => s.class == className).length;
+            let sections = ['A', 'B', 'C', 'D', 'E', 'F'];
+            return sections[Math.floor(count / 70)] || 'A';
+        }
+
+        function getWorkingDaysCount() {
+            let now = new Date();
+            let days = 0;
+            let year = now.getFullYear();
+            let month = now.getMonth();
+            let lastDay = new Date(year, month+1, 0).getDate();
+            for(let i=1; i<=lastDay; i++) {
+                if(new Date(year, month, i).getDay() !== 0) days++;
+            }
+            return days;
+        }
+
+        function getTeacherLeaveDays(teacherId) {
+            let now = new Date();
+            let year = now.getFullYear();
+            let month = now.getMonth();
+            return attendance.filter(a => {
+                if(a.teacherId !== teacherId) return false;
+                let d = new Date(a.date);
+                return d.getFullYear() === year && d.getMonth() === month && !isSunday(a.date) && a.isLeaveDay === true;
+            }).length;
+        }
+
+        function calculateTeacherSalary(teacher) {
+            if(!teacher) return 0;
+            let monthlyBase = teacher.maxLectures * settings.salaryPerLecture;
+            let leaveDays = getTeacherLeaveDays(teacher.id);
+            let fine = leaveDays <= settings.freeLeaves ? 0 : (leaveDays - settings.freeLeaves) * settings.leaveFine;
+            return Math.max(0, monthlyBase - fine);
+        }
+
+        function getTeacherMonthData(teacherId) {
+            let now = new Date();
+            let year = now.getFullYear();
+            let month = now.getMonth();
+            let monthAttendance = attendance.filter(a => {
+                if(a.teacherId !== teacherId) return false;
+                let d = new Date(a.date);
+                return d.getFullYear() === year && d.getMonth() === month && !isSunday(a.date);
+            });
+            let totalLectures = monthAttendance.reduce((sum, a) => sum + a.lecturesTaken, 0);
+            let leaveDays = monthAttendance.filter(a => a.isLeaveDay).length;
+            let freeLeavesUsed = Math.min(leaveDays, settings.freeLeaves);
+            let paidLeaves = Math.max(0, leaveDays - settings.freeLeaves);
+            let fine = paidLeaves * settings.leaveFine;
+            let presentDays = monthAttendance.length - leaveDays;
+            return { totalLectures, leaveDays, presentDays, freeLeavesUsed, paidLeaves, fine };
+        }
+
+        // Extra charges
+        function getExtraChargesTotal(rollNo) {
+            return extraCharges.filter(c => c.rollNo === rollNo).reduce((sum, c) => sum + c.amount, 0);
+        }
+
+        function getTotalDueForStudent(student) {
+            if(!student) return 0;
+            let extraTotal = getExtraChargesTotal(student.rollNum);
+            return student.fee + extraTotal;
+        }
+
+        function addExtraCharge() {
+            let rollNo = parseInt(document.getElementById('extraChargeRollNo').value);
+            let description = document.getElementById('extraChargeDesc').value.trim();
+            let amount = parseFloat(document.getElementById('extraChargeAmount').value);
+            if(!rollNo) { showAlert("Enter Roll Number!", "error"); return; }
+            if(!description) { showAlert("Enter description!", "error"); return; }
+            if(!amount || amount <= 0) { showAlert("Enter valid amount!", "error"); return; }
+            let student = students.find(s => s.rollNum === rollNo);
+            if(!student) { showAlert("Student not found!", "error"); return; }
+            extraCharges.push({
+                id: nextExtraChargeId++,
+                rollNo: rollNo,
+                description: description,
+                amount: amount,
+                dateAdded: new Date().toISOString().split('T')[0]
+            });
+            saveAllData();
+            updateAll();
+            showAlert(`Extra charge added for ${student.name}: ${description} - ₹${amount}`, "success");
+            document.getElementById('extraChargeRollNo').value = '';
+            document.getElementById('extraChargeDesc').value = '';
+            document.getElementById('extraChargeAmount').value = '';
+        }
+
+        // ==================== FEE SLIP PRINTING ====================
+        function printFeeSlip(rollNo) {
+            let student = students.find(s => s.rollNum === rollNo);
+            if (!student) {
+                showAlert("Student not found!", "error");
+                return;
+            }
+            let extraList = extraCharges.filter(c => c.rollNo === rollNo);
+            let payments = feeHistory.filter(f => f.rollNo === rollNo).sort((a,b) => new Date(a.date) - new Date(b.date));
+            let totalPaid = payments.reduce((sum, p) => sum + p.amount, 0);
+            let extraTotal = extraList.reduce((sum, e) => sum + e.amount, 0);
+            let totalDue = student.fee + extraTotal;
+            let remaining = totalDue - totalPaid;
+            let statusClass = remaining <= 0 ? "status-paid" : "status-unpaid";
+            let statusText = remaining <= 0 ? "FULLY PAID" : "PENDING";
+
+            // Create print window content
+            let printContent = `
+            <div class="print-slip-container">
+                <div class="slip-header">
+                    <h2>🏫 CAPRA EDUCATIONAL INSTITUTE</h2>
+                    <p>Lecture-wise Attendance System | Fee Receipt / Statement</p>
+                    <p><strong>Date:</strong> ${new Date().toLocaleDateString()}</p>
+                </div>
+                
+                <div class="slip-section">
+                    <h3>Student Information</h3>
+                    <div class="info-row"><div class="info-label">Roll Number:</div><div class="info-value">${student.rollNum}</div></div>
+                    <div class="info-row"><div class="info-label">Student Name:</div><div class="info-value">${student.name}</div></div>
+                    <div class="info-row"><div class="info-label">Class & Section:</div><div class="info-value">${student.class} - ${student.section}</div></div>
+                    <div class="info-row"><div class="info-label">Parent Name:</div><div class="info-value">${student.parent}</div></div>
+                    <div class="info-row"><div class="info-label">Phone:</div><div class="info-value">${student.phone}</div></div>
+                </div>
+
+                <div class="slip-section">
+                    <h3>Fee Breakdown</h3>
+                    <table class="fee-table">
+                        <tr><th>Description</th><th>Amount (₹)</th></tr>
+                        <tr><td>Monthly Tuition Fee</td><td>${student.fee}</td></tr>
+                        ${extraList.map(ec => `<tr><td>${ec.description} (${ec.dateAdded})</td><td>${ec.amount}</td></tr>`).join('')}
+                        <tr class="total-row"><td><strong>Total Due</strong></td><td><strong>${totalDue}</strong></td></tr>
+                    </table>
+                </div>
+
+                <div class="slip-section">
+                    <h3>Payment History</h3>
+                    ${payments.length === 0 ? '<p>No payments recorded yet.</p>' : `
+                    <table class="payment-table">
+                        <tr><th>Date</th><th>Amount (₹)</th><th>Method</th></tr>
+                        ${payments.map(p => `<tr><td>${p.date}</td><td>${p.amount}</td><td>${p.method || 'Cash'}</td></tr>`).join('')}
+                        <tr class="total-row"><td><strong>Total Paid</strong></td><td colspan="2"><strong>${totalPaid}</strong></td></tr>
+                    </table>
+                    `}
+                </div>
+
+                <div class="slip-section">
+                    <h3>Outstanding Balance</h3>
+                    <div class="info-row"><div class="info-label">Remaining Amount:</div><div class="info-value ${statusClass}">₹${remaining}</div></div>
+                    <div class="info-row"><div class="info-label">Status:</div><div class="info-value ${statusClass}">${statusText}</div></div>
+                </div>
+
+                <div class="slip-footer">
+                    <p>This is a computer generated statement. Valid with authorized signature.</p>
+                    <p>Capra Educational Institute | www.capra.edu | Thank you!</p>
+                </div>
+            </div>
+            `;
+            
+            let printWindow = window.open('', '_blank', 'width=800,height=600');
+            printWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Fee Slip - ${student.name} (Roll ${student.rollNum})</title>
+                    <style>
+                        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 20px; background: white; }
+                        ${document.querySelector('style').innerHTML}
+                    </style>
+                </head>
+                <body>
+                    ${printContent}
+                    <script>
+                        window.onload = function() {
+                            window.print();
+                            setTimeout(function() { window.close(); }, 500);
+                        };
+                    <\/script>
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+        }
+
+        // ==================== UPDATE UI FUNCTIONS ====================
+        function updateAll() {
+            updateDashboard();
+            updateTeachersList();
+            updateStudentsList();
+            updateAttendanceList();
+            updateSalaryList();
+            updateFeeHistory();
+            
+            let totalSalary = teachers.reduce((sum, t) => sum + calculateTeacherSalary(t), 0);
+            document.getElementById('totalSalaryMonth').innerHTML = '₹' + totalSalary.toFixed(0);
+            document.getElementById('workingDaysCount').innerHTML = getWorkingDaysCount();
+            
+            let collected = feeHistory.reduce((s, f) => s + f.amount, 0);
+            let totalDue = students.reduce((sum, s) => sum + getTotalDueForStudent(s), 0);
+            document.getElementById('totalCollected').innerHTML = '₹' + collected;
+            document.getElementById('totalPending').innerHTML = '₹' + (totalDue - collected);
+            
+            document.getElementById('salaryPerLecture').value = settings.salaryPerLecture;
+            document.getElementById('leaveFine').value = settings.leaveFine;
+            document.getElementById('freeLeaves').value = settings.freeLeaves;
+        }
+
+        function updateDashboard() {
+            document.getElementById('dashTeachers').innerHTML = teachers.length;
+            document.getElementById('dashStudents').innerHTML = students.length;
+            let collected = feeHistory.reduce((s, f) => s + f.amount, 0);
+            document.getElementById('dashFees').innerHTML = '₹' + collected;
+            let totalSalary = teachers.reduce((s, t) => s + calculateTeacherSalary(t), 0);
+            document.getElementById('dashSalary').innerHTML = '₹' + totalSalary.toFixed(0);
+        }
+
+        function updateTeachersList() {
+            let tbody = document.getElementById('teachersList');
+            tbody.innerHTML = '';
+            teachers.forEach(t => {
+                let data = getTeacherMonthData(t.id);
+                let salary = calculateTeacherSalary(t);
+                let paid = isSalaryPaid(t.id);
+                tbody.innerHTML += `<tr style="${paid ? 'background-color:#e8f5e9' : ''}">
+                    <td>${t.id}</td><td>${t.name}</td><td>${t.subject}</td><td>${t.phone}</td>
+                    <td>${t.maxLectures}</td><td>${data.totalLectures}</td><td>${data.leaveDays}</td>
+                    <td>₹${data.fine}</td><td>₹${salary.toFixed(0)}</td>
+                    <td>${paid ? '<span class="paid-badge">✓ Paid</span>' : '<span class="status-unpaid">Pending</span>'}</td>
+                    <td><button class="btn-danger" onclick="removeTeacher(${t.id})">Remove</button></td>
+                 </tr>`;
+            });
+        }
+
+        function updateStudentsList() {
+            let tbody = document.getElementById('studentsList');
+            tbody.innerHTML = '';
+            students.forEach(s => {
+                let paid = feeHistory.filter(f => f.rollNo == s.rollNum).reduce((sum, f) => sum + f.amount, 0);
+                let extraTotal = getExtraChargesTotal(s.rollNum);
+                let totalDue = s.fee + extraTotal;
+                let isFullyPaid = paid >= totalDue;
+                let rowClass = isFullyPaid ? 'student-paid-row' : '';
+                let statusText = isFullyPaid ? '✓ Paid' : 'Pending ₹' + (totalDue - paid);
+                let statusClass = isFullyPaid ? 'status-paid' : 'status-unpaid';
+                tbody.innerHTML += `<tr class="${rowClass}">
+                    <td>${s.rollNum}</td><td>${s.name}</td><td>Class ${s.class}</td><td>${s.section}</td>
+                    <td>${s.parent}</td><td>${s.phone}</td><td>₹${s.fee}</td>
+                    <td>₹${extraTotal}</td><td>₹${totalDue}</td>
+                    <td class="${statusClass}">${statusText}<br><button class="btn-success" style="padding:3px 8px;font-size:11px" onclick="collectFee(${s.rollNum})">Pay</button></td>
+                    <td><button class="btn-danger" onclick="removeStudent(${s.rollNum})">Remove</button>
+                    <button class="btn-warning" style="padding:3px 8px;font-size:11px; margin-left:5px;" onclick="printFeeSlip(${s.rollNum})">🖨️ Print Slip</button></td>
+                 </tr>`;
+            });
+        }
+
+        function updateAttendanceList() { /* same as before - kept for brevity */ 
+            let tbody = document.getElementById('attendanceList');
+            tbody.innerHTML = '';
+            let teacherSelect = document.getElementById('attendanceTeacher');
+            if(teacherSelect) {
+                teacherSelect.innerHTML = '<option value="">Select Teacher</option>';
+                teachers.forEach(t => {
+                    teacherSelect.innerHTML += `<option value="${t.id}">${t.name} (${t.maxLectures} lectures/day)</option>`;
+                });
+            }
+            attendance.slice().reverse().forEach(a => {
+                let teacher = teachers.find(t => t.id == a.teacherId);
+                let isSun = isSunday(a.date);
+                let leaveDays = teacher ? getTeacherLeaveDays(teacher.id) : 0;
+                let isFreeLeave = a.isLeaveDay && leaveDays <= settings.freeLeaves;
+                tbody.innerHTML += `<tr>
+                    <td>${a.date}</td><td>${getDayName(a.date)} ${isSun ? '🎉' : ''}</td>
+                    <td>${teacher ? teacher.name : 'Unknown'}</td>
+                    <td>${a.lecturesTaken} / ${a.maxLectures}</td><td>${a.maxLectures}</td>
+                    <td>${a.isLeaveDay ? '❌ Leave Day' : '✅ Present'}</td>
+                    <td>${a.isLeaveDay && !isSun ? (isFreeLeave ? 'FREE' : '₹' + settings.leaveFine) : '-'}</td>
+                    <td>${a.isLeaveDay && !isSun ? (isFreeLeave ? '1st leave free!' : `Leave #${leaveDays}`) : '-'}</td>
+                </tr>`;
+            });
+        }
+
+        function updateSalaryList() {
+            let tbody = document.getElementById('salaryList');
+            tbody.innerHTML = '';
+            let workingDays = getWorkingDaysCount();
+            teachers.forEach(t => {
+                let data = getTeacherMonthData(t.id);
+                let salary = calculateTeacherSalary(t);
+                let isPaid = isSalaryPaid(t.id);
+                let rowClass = isPaid ? 'salary-paid-row' : '';
+                tbody.innerHTML += `<tr class="${rowClass}">
+                    <td>${t.id}</td><td>${t.name}</td><td>${t.subject}</td>
+                    <td>${data.totalLectures}</td><td>${data.presentDays} / ${workingDays}</td>
+                    <td>${data.leaveDays}</td><td>${data.freeLeavesUsed}</td>
+                    <td>${data.paidLeaves}</td><td>₹${data.fine}</td>
+                    <td><strong>₹${salary.toFixed(0)}</strong></td>
+                    <td>${isPaid ? '<span class="paid-badge">✓ Paid</span>' : '<span class="status-unpaid">Unpaid</span>'}</td>
+                    <td>${!isPaid ? `<button class="pay-btn" onclick="markSalaryPaid(${t.id})">Pay Salary</button>` : '<button disabled style="background:#95a5a6;">Paid</button>'}</td>
+                 </tr>`;
+            });
+        }
+
+        function updateFeeHistory() {
+            let tbody = document.getElementById('feeHistoryList');
+            tbody.innerHTML = '';
+            feeHistory.slice().reverse().forEach(f => {
+                let student = students.find(s => s.rollNum == f.rollNo);
+                tbody.innerHTML += `<tr>
+                    <td>${f.date}</td><td>${f.rollNo}</td><td>${student ? student.name : 'Unknown'}</td>
+                    <td>₹${f.amount}</td><td>${f.method || 'Cash'}</td>
+                </tr>`;
+            });
+        }
+
+        // Attendance checkboxes (same as before)
+        function loadLectureCheckboxes() { /* unchanged, kept for functionality */ 
+            let date = document.getElementById('attendanceDate').value;
+            if(date && isSunday(date)) {
+                document.getElementById('lectureCheckboxes').innerHTML = '<div class="alert alert-info">🎉 Sunday is a holiday! No attendance needed.</div>';
+                document.getElementById('attendanceSummary').style.display = 'none';
+                return;
+            }
+            let teacherId = parseInt(document.getElementById('attendanceTeacher').value);
+            let teacher = teachers.find(t => t.id === teacherId);
+            let container = document.getElementById('lectureCheckboxes');
+            if(teacher && teacher.maxLectures) {
+                let existing = attendance.find(a => a.teacherId === teacherId && a.date === date);
+                if(existing) {
+                    container.innerHTML = `<div class="alert alert-info">⚠️ Attendance already marked! ${existing.lecturesTaken}/${existing.maxLectures} lectures taken on ${existing.date}</div>`;
+                    document.getElementById('attendanceSummary').style.display = 'none';
+                    return;
+                }
+                let currentLeaves = getTeacherLeaveDays(teacherId);
+                let freeLeavesLeft = Math.max(0, settings.freeLeaves - currentLeaves);
+                let html = `<div class="alert alert-info" style="margin-bottom:15px;">
+                    📊 <strong>Teacher Leave Status:</strong> ${currentLeaves} leave(s) taken this month | 
+                    ${freeLeavesLeft} free leave(s) remaining | Fine: ₹${settings.leaveFine} from next leave
+                </div><div class="lecture-container">`;
+                for(let i=1; i<=teacher.maxLectures; i++) {
+                    html += `<label class="lecture-checkbox" onclick="toggleCheckbox(this, ${i})">
+                        <input type="checkbox" value="${i}" onchange="updateAttendanceSummary()"> 📖 Lecture ${i}
+                    </label>`;
+                }
+                html += '</div><p><small>✅ Check the boxes for lectures the teacher completed today</small></p>';
+                html += `<p><strong>⚠️ Note:</strong> If the teacher misses ANY lecture today, it counts as a leave day. 
+                        ${freeLeavesLeft > 0 ? 'This will be FREE (no fine)!' : 'This will cost ₹' + settings.leaveFine + ' fine!'}</p>`;
+                container.innerHTML = html;
+                document.getElementById('attendanceSummary').style.display = 'block';
+                updateAttendanceSummary();
+            } else {
+                container.innerHTML = '<p>Please select a teacher</p>';
+                document.getElementById('attendanceSummary').style.display = 'none';
+            }
+        }
+
+        function toggleCheckbox(element, lectureNum) {
+            let checkbox = element.querySelector('input');
+            checkbox.checked = !checkbox.checked;
+            if(checkbox.checked) element.classList.add('selected');
+            else element.classList.remove('selected');
+            updateAttendanceSummary();
+        }
+
+        function updateAttendanceSummary() {
+            let checkboxes = document.querySelectorAll('#lectureCheckboxes input[type="checkbox"]');
+            let total = checkboxes.length;
+            let checked = Array.from(checkboxes).filter(cb => cb.checked).length;
+            let summary = document.getElementById('attendanceSummary');
+            let teacherId = parseInt(document.getElementById('attendanceTeacher').value);
+            let currentLeaves = getTeacherLeaveDays(teacherId);
+            let freeLeavesLeft = Math.max(0, settings.freeLeaves - currentLeaves);
+            if(total > 0) {
+                let isLeaveDay = checked < total;
+                let willBeFree = isLeaveDay && freeLeavesLeft > 0;
+                summary.innerHTML = `<strong>Summary:</strong><br>✅ Lectures Taken: ${checked} / ${total}<br>${isLeaveDay ? 
+                    `⚠️ This will be counted as a LEAVE DAY!<br>${willBeFree ? '🎉 FREE leave! ' + freeLeavesLeft + ' free left.' : '💰 Fine ₹' + settings.leaveFine}` : 
+                    '✅ Full attendance - No leave, no fine'}`;
+                summary.style.background = isLeaveDay ? (willBeFree ? '#d4edda' : '#fff3cd') : '#d4edda';
+            }
+        }
+
+        function saveCheckboxAttendance() {
+            let date = document.getElementById('attendanceDate').value;
+            let teacherId = parseInt(document.getElementById('attendanceTeacher').value);
+            let teacher = teachers.find(t => t.id === teacherId);
+            if(!date) { showAlert("Select date!", "error"); return; }
+            if(isSunday(date)) { showAlert("Sunday holiday!", "error"); return; }
+            if(!teacher) { showAlert("Select teacher!", "error"); return; }
+            let checkboxes = document.querySelectorAll('#lectureCheckboxes input[type="checkbox"]');
+            if(checkboxes.length === 0) { showAlert("Load teacher first!", "error"); return; }
+            let lecturesTaken = Array.from(checkboxes).filter(cb => cb.checked).length;
+            let isLeaveDay = lecturesTaken < teacher.maxLectures;
+            if(attendance.find(a => a.teacherId === teacherId && a.date === date)) {
+                showAlert("Attendance already marked!", "error");
+                return;
+            }
+            attendance.push({
+                date, teacherId, lecturesTaken, maxLectures: teacher.maxLectures,
+                isLeaveDay, dayName: getDayName(date), wasFree: isLeaveDay && getTeacherLeaveDays(teacherId) < settings.freeLeaves
+            });
+            saveAllData();
+            updateAll();
+            if(isLeaveDay) {
+                let currentLeaves = getTeacherLeaveDays(teacherId);
+                let willBeFree = currentLeaves <= settings.freeLeaves;
+                if(willBeFree) showAlert(`📌 ${teacher.name} - ${lecturesTaken}/${teacher.maxLectures} lectures. FREE LEAVE!`, "success");
+                else showAlert(`⚠️ ${teacher.name} - LEAVE DAY! Fine applied.`, "warning");
+            } else {
+                showAlert(`✅ ${teacher.name} - Full attendance! ${lecturesTaken}/${teacher.maxLectures} lectures`, "success");
+            }
+            document.getElementById('attendanceDate').value = '';
+            document.getElementById('attendanceTeacher').value = '';
+            document.getElementById('lectureCheckboxes').innerHTML = '';
+            document.getElementById('attendanceSummary').style.display = 'none';
+        }
+
+        function checkIfSunday() {
+            let date = document.getElementById('attendanceDate').value;
+            let warning = document.getElementById('sundayWarning');
+            if(date && isSunday(date)) {
+                warning.style.display = 'inline-block';
+                document.getElementById('lectureCheckboxes').innerHTML = '<div class="alert alert-info">🎉 Sunday holiday! No attendance needed.</div>';
+                document.getElementById('attendanceSummary').style.display = 'none';
+            } else {
+                warning.style.display = 'none';
+                if(document.getElementById('attendanceTeacher').value) loadLectureCheckboxes();
+            }
+        }
+
+        // Fee collection (with print slip button inside loaded student info)
+        function collectFee(rollNo) {
+            let student = students.find(s => s.rollNum == rollNo);
+            if(!student) return;
+            let totalDue = getTotalDueForStudent(student);
+            let paid = feeHistory.filter(f => f.rollNo == rollNo).reduce((s, f) => s + f.amount, 0);
+            let remaining = totalDue - paid;
+            if(remaining <= 0) { showAlert("All dues (including extra charges) are fully paid!", "info"); return; }
+            let amount = prompt(`Enter amount for ${student.name} (Total Due: ₹${totalDue}, Paid: ₹${paid}, Remaining: ₹${remaining})`, remaining);
+            if(amount && !isNaN(amount) && parseFloat(amount) > 0) {
+                let method = prompt("Payment method (Cash/Card/Online)", "Cash");
+                feeHistory.push({
+                    date: new Date().toISOString().split('T')[0],
+                    rollNo: rollNo,
+                    amount: parseFloat(amount),
+                    method: method || "Cash"
+                });
+                saveAllData();
+                updateAll();
+                showAlert(`₹${amount} collected from ${student.name}`, "success");
+            }
+        }
+
+        function loadStudentForFee() {
+            let rollNo = parseInt(document.getElementById('feeRollNo').value);
+            let student = students.find(s => s.rollNum == rollNo);
+            let div = document.getElementById('feeStudentInfo');
+            if(student) {
+                let totalDue = getTotalDueForStudent(student);
+                let paid = feeHistory.filter(f => f.rollNo == rollNo).reduce((s, f) => s + f.amount, 0);
+                let remaining = totalDue - paid;
+                let extraList = extraCharges.filter(c => c.rollNo === rollNo);
+                let extraHtml = '';
+                if(extraList.length) {
+                    extraHtml = '<p><strong>Extra Charges:</strong></p>';
+                    extraList.forEach(ec => {
+                        extraHtml += `<div class="extra-charge-item">${ec.description} (${ec.dateAdded}): ₹${ec.amount}</div>`;
+                    });
+                }
+                div.innerHTML = `<div style="margin-top:15px;padding:15px;background:#e8f4f8;border-radius:5px">
+                    <p><strong>${student.name}</strong> (Roll: ${student.rollNum})</p>
+                    <p>Class ${student.class}-${student.section}</p>
+                    <p>Monthly Fee: ₹${student.fee}</p>
+                    ${extraHtml}
+                    <p><strong>Total Due:</strong> ₹${totalDue}</p>
+                    <p><strong>Paid:</strong> ₹${paid}</p>
+                    <p><strong>Remaining:</strong> ₹${remaining}</p>
+                    ${remaining > 0 ? `<button onclick="collectFee(${student.rollNum})" class="btn-success">Collect Fee</button>` : '<p class="status-paid">✓ Fully Paid (including extra charges)</p>'}
+                    <button onclick="printFeeSlip(${student.rollNum})" class="btn-warning" style="margin-left:10px;">🖨️ Print Fee Slip</button>
+                </div>`;
+            } else {
+                div.innerHTML = '<div class="alert alert-error" style="display:block">Student not found!</div>';
+            }
+        }
+
+        // Search functions (unchanged but fixed)
+        function searchStudentByRoll() {
+            let rollNo = parseInt(document.getElementById('searchRollNo').value);
+            let student = students.find(s => s.rollNum == rollNo);
+            let div = document.getElementById('studentDetails');
+            if(student) {
+                let totalDue = getTotalDueForStudent(student);
+                let paid = feeHistory.filter(f => f.rollNo == rollNo).reduce((s, f) => s + f.amount, 0);
+                let extraList = extraCharges.filter(c => c.rollNo === rollNo);
+                let extraHtml = '';
+                if(extraList.length) {
+                    extraHtml = '<p><strong>Extra Charges:</strong></p><ul>';
+                    extraList.forEach(ec => { extraHtml += `<li>${ec.description} (${ec.dateAdded}): ₹${ec.amount}</li>`; });
+                    extraHtml += '</ul>';
+                }
+                div.innerHTML = `<div class="form-card" style="margin:0">
+                    <h4>Student Details</h4>
+                    <p><strong>Roll No:</strong> ${student.rollNum}</p>
+                    <p><strong>Name:</strong> ${student.name}</p>
+                    <p><strong>Class:</strong> ${student.class}-${student.section}</p>
+                    <p><strong>Parent:</strong> ${student.parent}</p>
+                    <p><strong>Phone:</strong> ${student.phone}</p>
+                    <p><strong>Monthly Fee:</strong> ₹${student.fee}</p>
+                    ${extraHtml}
+                    <p><strong>Total Due:</strong> ₹${totalDue}</p>
+                    <p><strong>Paid:</strong> ₹${paid}</p>
+                    <p><strong>Status:</strong> ${paid >= totalDue ? '<span class="status-paid">PAID</span>' : '<span class="status-unpaid">PENDING</span>'}</p>
+                    <button onclick="printFeeSlip(${student.rollNum})" class="btn-warning">🖨️ Print Fee Slip</button>
+                </div>`;
+            } else {
+                div.innerHTML = '<div class="alert alert-error">Student not found! Please check Roll Number.</div>';
+            }
+        }
+
+        function searchTeacherById() {
+            let id = parseInt(document.getElementById('searchTeacherId').value);
+            let teacher = teachers.find(t => t.id == id);
+            let div = document.getElementById('teacherDetails');
+            if(teacher) {
+                let data = getTeacherMonthData(teacher.id);
+                let salary = calculateTeacherSalary(teacher);
+                div.innerHTML = `<div class="form-card" style="margin:0">
+                    <h4>Teacher Details</h4>
+                    <p><strong>ID:</strong> ${teacher.id}</p>
+                    <p><strong>Name:</strong> ${teacher.name}</p>
+                    <p><strong>Subject:</strong> ${teacher.subject}</p>
+                    <p><strong>Phone:</strong> ${teacher.phone}</p>
+                    <p><strong>Daily Lectures Capacity:</strong> ${teacher.maxLectures}</p>
+                    <p><strong>Total Lectures (this month):</strong> ${data.totalLectures}</p>
+                    <p><strong>Present Days:</strong> ${data.presentDays}</p>
+                    <p><strong>Leave Days:</strong> ${data.leaveDays}</p>
+                    <p><strong>Free Leaves Used:</strong> ${data.freeLeavesUsed} / ${settings.freeLeaves}</p>
+                    <p><strong>Paid Leaves:</strong> ${data.paidLeaves}</p>
+                    <p><strong>Fine Amount:</strong> ₹${data.fine}</p>
+                    <p><strong>Final Salary:</strong> ₹${salary.toFixed(0)}</p>
+                </div>`;
+            } else {
+                div.innerHTML = '<div class="alert alert-error">Teacher not found! Please check ID.</div>';
+            }
+        }
+
+        // Remove functions
+        function removeTeacher(id) {
+            if(confirm("Remove teacher? All attendance records will be deleted.")) {
+                teachers = teachers.filter(t => t.id != id);
+                attendance = attendance.filter(a => a.teacherId != id);
+                saveAllData();
+                updateAll();
+                showAlert("Teacher removed!", "success");
+            }
+        }
+
+        function removeStudent(rollNo) {
+            if(confirm("Remove student? All fee records and extra charges will be deleted.")) {
+                students = students.filter(s => s.rollNum != rollNo);
+                feeHistory = feeHistory.filter(f => f.rollNo != rollNo);
+                extraCharges = extraCharges.filter(c => c.rollNo != rollNo);
+                saveAllData();
+                updateAll();
+                showAlert("Student removed!", "success");
+            }
+        }
+
+        function searchTeachers() {
+            let search = document.getElementById('teacherSearch').value.toLowerCase();
+            let filtered = teachers.filter(t => t.name.toLowerCase().includes(search) || t.id.toString().includes(search));
+            let tbody = document.getElementById('teachersList');
+            tbody.innerHTML = '';
+            filtered.forEach(t => {
+                let data = getTeacherMonthData(t.id);
+                let salary = calculateTeacherSalary(t);
+                let paid = isSalaryPaid(t.id);
+                tbody.innerHTML += `<tr style="${paid ? 'background-color:#e8f5e9' : ''}">
+                    <td>${t.id}</td><td>${t.name}</td><td>${t.subject}</td><td>${t.phone}</td>
+                    <td>${t.maxLectures}</td><td>${data.totalLectures}</td><td>${data.leaveDays}</td>
+                    <td>₹${data.fine}</td><td>₹${salary.toFixed(0)}</td>
+                    <td>${paid ? '✓ Paid' : 'Pending'}</td>
+                    <td><button class="btn-danger" onclick="removeTeacher(${t.id})">Remove</button></td>
+                 </tr>`;
+            });
+        }
+
+        function searchStudents() {
+            let search = document.getElementById('studentSearch').value.toLowerCase();
+            let filtered = students.filter(s => s.name.toLowerCase().includes(search) || s.rollNum.toString().includes(search));
+            let tbody = document.getElementById('studentsList');
+            tbody.innerHTML = '';
+            filtered.forEach(s => {
+                let paid = feeHistory.filter(f => f.rollNo == s.rollNum).reduce((sum, f) => sum + f.amount, 0);
+                let extraTotal = getExtraChargesTotal(s.rollNum);
+                let totalDue = s.fee + extraTotal;
+                let isFullyPaid = paid >= totalDue;
+                let rowClass = isFullyPaid ? 'student-paid-row' : '';
+                let statusText = isFullyPaid ? '✓ Paid' : 'Pending ₹' + (totalDue - paid);
+                let statusClass = isFullyPaid ? 'status-paid' : 'status-unpaid';
+                tbody.innerHTML += `<tr class="${rowClass}">
+                    <td>${s.rollNum}</td><td>${s.name}</td><td>Class ${s.class}</td><td>${s.section}</td>
+                    <td>${s.parent}</td><td>${s.phone}</td><td>₹${s.fee}</td>
+                    <td>₹${extraTotal}</td><td>₹${totalDue}</td>
+                    <td class="${statusClass}">${statusText}<br><button class="btn-success" style="padding:3px 8px;font-size:11px" onclick="collectFee(${s.rollNum})">Pay</button></td>
+                    <td><button class="btn-danger" onclick="removeStudent(${s.rollNum})">Remove</button>
+                    <button class="btn-warning" style="padding:3px 8px;font-size:11px; margin-left:5px;" onclick="printFeeSlip(${s.rollNum})">🖨️ Print Slip</button></td>
+                 </tr>`;
+            });
+        }
+
+        function exportToCSV(type) { /* unchanged and functional */ 
+            let headers = [], data = [];
+            if(type === 'teachers') {
+                headers = ['ID','Name','Subject','Phone','Daily Lectures','Month Lectures','Leave Days','Fine','Salary'];
+                data = teachers.map(t => { let d = getTeacherMonthData(t.id); return [t.id, t.name, t.subject, t.phone, t.maxLectures, d.totalLectures, d.leaveDays, d.fine, calculateTeacherSalary(t)]; });
+            } else if(type === 'students') {
+                headers = ['Roll No','Name','Class','Section','Parent','Phone','Monthly Fee','Extra Charges','Total Due','Paid','Status'];
+                data = students.map(s => { let paid = feeHistory.filter(f => f.rollNo == s.rollNum).reduce((sum, f) => sum + f.amount, 0); let extra = getExtraChargesTotal(s.rollNum); let total = s.fee + extra; return [s.rollNum, s.name, s.class, s.section, s.parent, s.phone, s.fee, extra, total, paid, paid >= total ? 'Paid' : 'Pending']; });
+            } else if(type === 'salary') {
+                headers = ['ID','Name','Subject','Total Lectures','Present Days','Leave Days','Free Leaves','Paid Leaves','Fine','Salary'];
+                data = teachers.map(t => { let d = getTeacherMonthData(t.id); return [t.id, t.name, t.subject, d.totalLectures, d.presentDays, d.leaveDays, d.freeLeavesUsed, d.paidLeaves, d.fine, calculateTeacherSalary(t)]; });
+            }
+            let csv = headers.join(',') + '\n' + data.map(row => row.map(c => `"${c}"`).join(',')).join('\n');
+            let blob = new Blob([csv], {type: 'text/csv'});
+            let a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `${type}_report.csv`;
+            a.click();
+            showAlert("Export complete!", "success");
+        }
+
+        function saveSettings() {
+            settings.salaryPerLecture = parseInt(document.getElementById('salaryPerLecture').value);
+            settings.leaveFine = parseInt(document.getElementById('leaveFine').value);
+            settings.freeLeaves = parseInt(document.getElementById('freeLeaves').value);
+            saveAllData();
+            updateAll();
+            showAlert("Settings saved!", "success");
+        }
+
+        function backupData() {
+            let backup = { teachers, students, attendance, feeHistory, salaryPayments, extraCharges, nextRollNum, teacherIdCounter, nextExtraChargeId, settings };
+            let a = document.createElement('a');
+            a.href = URL.createObjectURL(new Blob([JSON.stringify(backup)], {type: 'application/json'}));
+            a.download = `capra_backup_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            showAlert("Backup created!", "success");
+        }
+
+        function restoreData() {
+            let input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'application/json';
+            input.onchange = e => {
+                let file = e.target.files[0];
+                let reader = new FileReader();
+                reader.onload = event => {
+                    let data = JSON.parse(event.target.result);
+                    teachers = data.teachers || [];
+                    students = data.students || [];
+                    attendance = data.attendance || [];
+                    feeHistory = data.feeHistory || [];
+                    salaryPayments = data.salaryPayments || [];
+                    extraCharges = data.extraCharges || [];
+                    nextRollNum = data.nextRollNum || 801;
+                    teacherIdCounter = data.teacherIdCounter || 1;
+                    nextExtraChargeId = data.nextExtraChargeId || 1;
+                    if(data.settings) settings = data.settings;
+                    saveAllData();
+                    updateAll();
+                    showAlert("Data restored successfully!", "success");
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        }
+
+        function clearAllData() {
+            if(confirm("⚠️ DELETE ALL DATA? This cannot be undone! All teachers, students, attendance, fees, extra charges and salary records will be permanently deleted.")) {
+                teachers = [];
+                students = [];
+                attendance = [];
+                feeHistory = [];
+                salaryPayments = [];
+                extraCharges = [];
+                nextRollNum = 801;
+                teacherIdCounter = 1;
+                nextExtraChargeId = 1;
+                saveAllData();
+                updateAll();
+                showAlert("All data cleared successfully!", "success");
+            }
+        }
+
+        function showAlert(msg, type) {
+            let div = document.createElement('div');
+            div.className = `alert alert-${type}`;
+            div.innerHTML = msg;
+            document.body.appendChild(div);
+            setTimeout(() => {
+                div.style.animation = 'slideOut 0.3s';
+                setTimeout(() => div.remove(), 300);
+            }, 3000);
+        }
+
+        function showTab(tab) {
+            document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tab).classList.add('active');
+            if(event && event.target) event.target.classList.add('active');
+            updateAll();
+        }
+
+        // Form submissions
+        document.getElementById('teacherForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            teachers.push({
+                id: teacherIdCounter++,
+                name: document.getElementById('teacherName').value,
+                subject: document.getElementById('teacherSubject').value,
+                phone: document.getElementById('teacherPhone').value,
+                maxLectures: parseInt(document.getElementById('teacherMaxLectures').value)
+            });
+            saveAllData();
+            updateAll();
+            e.target.reset();
+            showAlert("Teacher added!", "success");
+        });
+
+        document.getElementById('studentForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            let className = document.getElementById('studentClass').value;
+            students.push({
+                rollNum: nextRollNum++,
+                name: document.getElementById('studentName').value,
+                class: className,
+                section: getSectionForClass(className),
+                parent: document.getElementById('studentParent').value,
+                phone: document.getElementById('studentPhone').value,
+                fee: parseInt(document.getElementById('studentFee').value)
+            });
+            saveAllData();
+            updateAll();
+            e.target.reset();
+            document.getElementById('studentSection').value = '';
+            showAlert("Student added!", "success");
+        });
+
+        document.getElementById('studentClass').addEventListener('change', () => {
+            document.getElementById('studentSection').value = getSectionForClass(document.getElementById('studentClass').value);
+        });
+
+        // Initial load
+        loadAllData();
+        updateAll();
+        document.getElementById('attendanceDate').valueAsDate = new Date();
+    </script>
+</body>
+</html>
